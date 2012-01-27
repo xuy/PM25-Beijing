@@ -1,0 +1,5 @@
+#!/bin/sh
+cd /home/eric/PlayGround/PM25/pm25_beijing/
+/usr/local/bin/scrapy crawl pm25_beijing
+echo $? >> /home/eric/cron_log
+echo "hello" >> /home/eric/cron_log

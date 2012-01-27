@@ -1,0 +1,3 @@
+This is a simple scrapy spider that gets the PM25 data from
+http://zx.bjmemc.com.cn/.
+

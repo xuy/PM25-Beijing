@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1"><title>
+	PM2.5研究性监测
+</title><link href="../CSS/style.css" rel="stylesheet" type="text/css" />
+
+    <script src="../JS/FusionCharts.js" type="text/javascript"></script>
+
+    <script src="../JS/jquery-1.4.2.js" type="text/javascript"></script>
+
+    <script src="../JS/rightClick.js" type="text/javascript"></script>
+
+    <script src="../JS/artDialog/artDialog.js?skin=idialog" type="text/javascript"></script>
+
+    <style type="text/css">
+        body
+        {
+            font-size: 12px;
+            color: #036;
+            margin: 0;
+        }
+        .tabBg
+        {
+            background: url(../Images/TableTitleBg.jpg) repeat-x;
+            text-align: center;
+            color: #333;
+            border: 1px solid #20a4ff;
+            line-height: 20px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        //PM、能见度折线图切换
+        //        var isPM = false;
+        //        function tabsChange() {
+        //            if (isPM) {
+        //                $("#pmChart").css("display", "block");
+        //                $("#njdChart").css("display", "none");
+        //                $("#divUnit").html("mg/m³");
+        //                $("#span_name").html("&nbsp;能&nbsp;&nbsp;见&nbsp;&nbsp;度&nbsp;");
+        //                isPM = false;
+        //            } else {
+        //                $("#pmChart").css("display", "none");
+        //                $("#njdChart").css("display", "block");
+        //                $("#divUnit").html("km");
+        //                $("#span_name").html("PM10/PM2.5");
+        //                isPM = true;
+        //            }
+        //        }
+
+        //图片预览
+        //        function openPicSrc(pic) {
+        //            if (pic.indexOf("nophoto") == -1) {
+        //                art.dialog({
+        //                    content: '<img src="../Images/vpic/' + pic + '.jpg" alt="" width="530px" height="420px" />',
+        //                    lock: true
+        //                });
+        //            }
+        //        }
+    </script>
+
+</head>
+
+<body onload="RightClick.init('pmChart');" ondragstart="return false"
+    onselectstart="return false" oncopy="document.selection.empty()" onbeforecopy="return false">
+    <form name="myform" method="post" action="PM25.aspx" id="myform">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTEzOTMwNTI0MDAPFgIeBXRhYmxlMv9FAAEAAAD/////AQAAAAAAAAAMAgAAAE5TeXN0ZW0uRGF0YSwgVmVyc2lvbj0yLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAABVTeXN0ZW0uRGF0YS5EYXRhVGFibGUDAAAAGURhdGFUYWJsZS5SZW1vdGluZ1ZlcnNpb24JWG1sU2NoZW1hC1htbERpZmZHcmFtAwEBDlN5c3RlbS5WZXJzaW9uAgAAAAkDAAAABgQAAAC3CTw/eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9InV0Zi0xNiI/Pg0KPHhzOnNjaGVtYSB4bWxucz0iIiB4bWxuczp4cz0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOm1zZGF0YT0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp4bWwtbXNkYXRhIj4NCiAgPHhzOmVsZW1lbnQgbmFtZT0iVGFibGUxIj4NCiAgICA8eHM6Y29tcGxleFR5cGU+DQogICAgICA8eHM6c2VxdWVuY2U+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlRpbWVzIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJQTTEwIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJQTTEwRGlzIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJQTTIiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlBNMkRpcyIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iUmF0aW8iIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlZpc2liaWxpdHkiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICA8L3hzOnNlcXVlbmNlPg0KICAgIDwveHM6Y29tcGxleFR5cGU+DQogIDwveHM6ZWxlbWVudD4NCiAgPHhzOmVsZW1lbnQgbmFtZT0idG1wRGF0YVNldCIgbXNkYXRhOklzRGF0YVNldD0idHJ1ZSIgbXNkYXRhOk1haW5EYXRhVGFibGU9IlRhYmxlMSIgbXNkYXRhOlVzZUN1cnJlbnRMb2NhbGU9InRydWUiPg0KICAgIDx4czpjb21wbGV4VHlwZT4NCiAgICAgIDx4czpjaG9pY2UgbWluT2NjdXJzPSIwIiBtYXhPY2N1cnM9InVuYm91bmRlZCIgLz4NCiAgICA8L3hzOmNvbXBsZXhUeXBlPg0KICA8L3hzOmVsZW1lbnQ+DQo8L3hzOnNjaGVtYT4GBQAAAJs6PGRpZmZncjpkaWZmZ3JhbSB4bWxuczptc2RhdGE9InVybjpzY2hlbWFzLW1pY3Jvc29mdC1jb206eG1sLW1zZGF0YSIgeG1sbnM6ZGlmZmdyPSJ1cm46c2NoZW1hcy1taWNyb3NvZnQtY29tOnhtbC1kaWZmZ3JhbS12MSI+DQogIDx0bXBEYXRhU2V0Pg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTExIiBtc2RhdGE6cm93T3JkZXI9IjAiIGRpZmZncjpoYXNDaGFuZ2VzPSJpbnNlcnRlZCI+DQogICAgICA8VGltZXM+MjA6MDA8L1RpbWVzPg0KICAgICAgPFBNMTA+MC4wNjQ8L1BNMTA+DQogICAgICA8UE0xMERpcz4wLjA2NDwvUE0xMERpcz4NCiAgICAgIDxQTTI+MC4xMjk8L1BNMj4NCiAgICAgIDxQTTJEaXM+MC4xMjk8L1BNMkRpcz4NCiAgICAgIDxSYXRpbz4xMCU8L1JhdGlvPg0KICAgICAgPFZpc2liaWxpdHk+Ny41MjI8L1Zpc2liaWxpdHk+DQogICAgPC9UYWJsZTE+DQogICAgPFRhYmxlMSBkaWZmZ3I6aWQ9IlRhYmxlMTIiIG1zZGF0YTpyb3dPcmRlcj0iMSIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz4yMTowMDwvVGltZXM+DQogICAgICA8UE0xMD4wLjA2OTwvUE0xMD4NCiAgICAgIDxQTTEwRGlzPjAuMDY5PC9QTTEwRGlzPg0KICAgICAgPFBNMj4wLjEzNjwvUE0yPg0KICAgICAgPFBNMkRpcz4wLjEzNjwvUE0yRGlzPg0KICAgICAgPFJhdGlvPjEwJTwvUmF0aW8+DQogICAgICA8VmlzaWJpbGl0eT43LjQyMjwvVmlzaWJpbGl0eT4NCiAgICA8L1RhYmxlMT4NCiAgICA8VGFibGUxIGRpZmZncjppZD0iVGFibGUxMyIgbXNkYXRhOnJvd09yZGVyPSIyIiBkaWZmZ3I6aGFzQ2hhbmdlcz0iaW5zZXJ0ZWQiPg0KICAgICAgPFRpbWVzPjIyOjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMDc2PC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4wNzY8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMjIxPC9QTTI+DQogICAgICA8UE0yRGlzPjAuMjIxPC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjYuMTk3PC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTE0IiBtc2RhdGE6cm93T3JkZXI9IjMiIGRpZmZncjpoYXNDaGFuZ2VzPSJpbnNlcnRlZCI+DQogICAgICA8VGltZXM+MjM6MDA8L1RpbWVzPg0KICAgICAgPFBNMTA+MC4wODM8L1BNMTA+DQogICAgICA8UE0xMERpcz4wLjA4MzwvUE0xMERpcz4NCiAgICAgIDxQTTI+MC4xNzY8L1BNMj4NCiAgICAgIDxQTTJEaXM+MC4xNzY8L1BNMkRpcz4NCiAgICAgIDxSYXRpbz4xMCU8L1JhdGlvPg0KICAgICAgPFZpc2liaWxpdHk+Ni4yMjg8L1Zpc2liaWxpdHk+DQogICAgPC9UYWJsZTE+DQogICAgPFRhYmxlMSBkaWZmZ3I6aWQ9IlRhYmxlMTUiIG1zZGF0YTpyb3dPcmRlcj0iNCIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz4wOjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMDg2PC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4wODY8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMTQ1PC9QTTI+DQogICAgICA8UE0yRGlzPjAuMTQ1PC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjYuODE4PC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTE2IiBtc2RhdGE6cm93T3JkZXI9IjUiIGRpZmZncjpoYXNDaGFuZ2VzPSJpbnNlcnRlZCI+DQogICAgICA8VGltZXM+MTowMDwvVGltZXM+DQogICAgICA8UE0xMD4wLjA5MTwvUE0xMD4NCiAgICAgIDxQTTEwRGlzPjAuMDkxPC9QTTEwRGlzPg0KICAgICAgPFBNMj4wLjE4NjwvUE0yPg0KICAgICAgPFBNMkRpcz4wLjE4NjwvUE0yRGlzPg0KICAgICAgPFJhdGlvPjEwJTwvUmF0aW8+DQogICAgICA8VmlzaWJpbGl0eT42LjY0OTwvVmlzaWJpbGl0eT4NCiAgICA8L1RhYmxlMT4NCiAgICA8VGFibGUxIGRpZmZncjppZD0iVGFibGUxNyIgbXNkYXRhOnJvd09yZGVyPSI2IiBkaWZmZ3I6aGFzQ2hhbmdlcz0iaW5zZXJ0ZWQiPg0KICAgICAgPFRpbWVzPjI6MDA8L1RpbWVzPg0KICAgICAgPFBNMTA+MC4wOTc8L1BNMTA+DQogICAgICA8UE0xMERpcz4wLjA5NzwvUE0xMERpcz4NCiAgICAgIDxQTTI+MC4xNjg8L1BNMj4NCiAgICAgIDxQTTJEaXM+MC4xNjg8L1BNMkRpcz4NCiAgICAgIDxSYXRpbz4xMCU8L1JhdGlvPg0KICAgICAgPFZpc2liaWxpdHk+Ni4yNzc8L1Zpc2liaWxpdHk+DQogICAgPC9UYWJsZTE+DQogICAgPFRhYmxlMSBkaWZmZ3I6aWQ9IlRhYmxlMTgiIG1zZGF0YTpyb3dPcmRlcj0iNyIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz4zOjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTAxPC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDE8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMTQyPC9QTTI+DQogICAgICA8UE0yRGlzPjAuMTQyPC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjYuNDA0PC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTE5IiBtc2RhdGE6cm93T3JkZXI9IjgiIGRpZmZncjpoYXNDaGFuZ2VzPSJpbnNlcnRlZCI+DQogICAgICA8VGltZXM+NDowMDwvVGltZXM+DQogICAgICA8UE0xMD4wLjEwMDwvUE0xMD4NCiAgICAgIDxQTTEwRGlzPjAuMTAwPC9QTTEwRGlzPg0KICAgICAgPFBNMj4wLjA4ODwvUE0yPg0KICAgICAgPFBNMkRpcz4wLjA4ODwvUE0yRGlzPg0KICAgICAgPFJhdGlvPjEwJTwvUmF0aW8+DQogICAgICA8VmlzaWJpbGl0eT43LjIzNzwvVmlzaWJpbGl0eT4NCiAgICA8L1RhYmxlMT4NCiAgICA8VGFibGUxIGRpZmZncjppZD0iVGFibGUxMTAiIG1zZGF0YTpyb3dPcmRlcj0iOSIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz41OjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTAyPC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDI8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDg2PC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDg2PC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjguOTUzPC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTExMSIgbXNkYXRhOnJvd09yZGVyPSIxMCIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz42OjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTAzPC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDM8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDYxPC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDYxPC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjkuODkyPC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTExMiIgbXNkYXRhOnJvd09yZGVyPSIxMSIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz43OjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTA0PC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDQ8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDY3PC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDY3PC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjkuNTIzPC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTExMyIgbXNkYXRhOnJvd09yZGVyPSIxMiIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz44OjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTA2PC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDY8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDc2PC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDc2PC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjkuNTgyPC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTExNCIgbXNkYXRhOnJvd09yZGVyPSIxMyIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz45OjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTA1PC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDU8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDQ4PC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDQ4PC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjEyLjA5MjwvVmlzaWJpbGl0eT4NCiAgICA8L1RhYmxlMT4NCiAgICA8VGFibGUxIGRpZmZncjppZD0iVGFibGUxMTUiIG1zZGF0YTpyb3dPcmRlcj0iMTQiIGRpZmZncjpoYXNDaGFuZ2VzPSJpbnNlcnRlZCI+DQogICAgICA8VGltZXM+MTA6MDA8L1RpbWVzPg0KICAgICAgPFBNMTA+MC4xMDY8L1BNMTA+DQogICAgICA8UE0xMERpcz4wLjEwNjwvUE0xMERpcz4NCiAgICAgIDxQTTI+MC4xMzU8L1BNMj4NCiAgICAgIDxQTTJEaXM+MC4xMzU8L1BNMkRpcz4NCiAgICAgIDxSYXRpbz4xMCU8L1JhdGlvPg0KICAgICAgPFZpc2liaWxpdHk+OC45MzI8L1Zpc2liaWxpdHk+DQogICAgPC9UYWJsZTE+DQogICAgPFRhYmxlMSBkaWZmZ3I6aWQ9IlRhYmxlMTE2IiBtc2RhdGE6cm93T3JkZXI9IjE1IiBkaWZmZ3I6aGFzQ2hhbmdlcz0iaW5zZXJ0ZWQiPg0KICAgICAgPFRpbWVzPjExOjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTAzPC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDM8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDM3PC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDM3PC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjcuODMwPC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTExNyIgbXNkYXRhOnJvd09yZGVyPSIxNiIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz4xMjowMDwvVGltZXM+DQogICAgICA8UE0xMD4wLjEwNDwvUE0xMD4NCiAgICAgIDxQTTEwRGlzPjAuMTA0PC9QTTEwRGlzPg0KICAgICAgPFBNMj4wLjA2MTwvUE0yPg0KICAgICAgPFBNMkRpcz4wLjA2MTwvUE0yRGlzPg0KICAgICAgPFJhdGlvPjEwJTwvUmF0aW8+DQogICAgICA8VmlzaWJpbGl0eT4xMC4yNzM8L1Zpc2liaWxpdHk+DQogICAgPC9UYWJsZTE+DQogICAgPFRhYmxlMSBkaWZmZ3I6aWQ9IlRhYmxlMTE4IiBtc2RhdGE6cm93T3JkZXI9IjE3IiBkaWZmZ3I6aGFzQ2hhbmdlcz0iaW5zZXJ0ZWQiPg0KICAgICAgPFRpbWVzPjEzOjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTA1PC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDU8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDU4PC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDU4PC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjEwLjk5MDwvVmlzaWJpbGl0eT4NCiAgICA8L1RhYmxlMT4NCiAgICA8VGFibGUxIGRpZmZncjppZD0iVGFibGUxMTkiIG1zZGF0YTpyb3dPcmRlcj0iMTgiIGRpZmZncjpoYXNDaGFuZ2VzPSJpbnNlcnRlZCI+DQogICAgICA8VGltZXM+MTQ6MDA8L1RpbWVzPg0KICAgICAgPFBNMTA+MC4xMDU8L1BNMTA+DQogICAgICA8UE0xMERpcz4wLjEwNTwvUE0xMERpcz4NCiAgICAgIDxQTTI+MC4wODk8L1BNMj4NCiAgICAgIDxQTTJEaXM+MC4wODk8L1BNMkRpcz4NCiAgICAgIDxSYXRpbz4xMCU8L1JhdGlvPg0KICAgICAgPFZpc2liaWxpdHk+MTAuNTA5PC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTEyMCIgbXNkYXRhOnJvd09yZGVyPSIxOSIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz4xNTowMDwvVGltZXM+DQogICAgICA8UE0xMD4wLjExMDwvUE0xMD4NCiAgICAgIDxQTTEwRGlzPjAuMTEwPC9QTTEwRGlzPg0KICAgICAgPFBNMj4wLjExMDwvUE0yPg0KICAgICAgPFBNMkRpcz4wLjExMDwvUE0yRGlzPg0KICAgICAgPFJhdGlvPjEwJTwvUmF0aW8+DQogICAgICA8VmlzaWJpbGl0eT4xMC4zNzE8L1Zpc2liaWxpdHk+DQogICAgPC9UYWJsZTE+DQogICAgPFRhYmxlMSBkaWZmZ3I6aWQ9IlRhYmxlMTIxIiBtc2RhdGE6cm93T3JkZXI9IjIwIiBkaWZmZ3I6aGFzQ2hhbmdlcz0iaW5zZXJ0ZWQiPg0KICAgICAgPFRpbWVzPjE2OjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTA0PC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDQ8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDI4PC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDI4PC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjguOTcwPC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICAgIDxUYWJsZTEgZGlmZmdyOmlkPSJUYWJsZTEyMiIgbXNkYXRhOnJvd09yZGVyPSIyMSIgZGlmZmdyOmhhc0NoYW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxUaW1lcz4xNzowMDwvVGltZXM+DQogICAgICA8UE0xMD4wLjEwNjwvUE0xMD4NCiAgICAgIDxQTTEwRGlzPjAuMTA2PC9QTTEwRGlzPg0KICAgICAgPFBNMj4wLjA5NDwvUE0yPg0KICAgICAgPFBNMkRpcz4wLjA5NDwvUE0yRGlzPg0KICAgICAgPFJhdGlvPjEwJTwvUmF0aW8+DQogICAgICA8VmlzaWJpbGl0eT44Ljk4NjwvVmlzaWJpbGl0eT4NCiAgICA8L1RhYmxlMT4NCiAgICA8VGFibGUxIGRpZmZncjppZD0iVGFibGUxMjMiIG1zZGF0YTpyb3dPcmRlcj0iMjIiIGRpZmZncjpoYXNDaGFuZ2VzPSJpbnNlcnRlZCI+DQogICAgICA8VGltZXM+MTg6MDA8L1RpbWVzPg0KICAgICAgPFBNMTA+MC4xMDc8L1BNMTA+DQogICAgICA8UE0xMERpcz4wLjEwNzwvUE0xMERpcz4NCiAgICAgIDxQTTI+MC4xMDU8L1BNMj4NCiAgICAgIDxQTTJEaXM+MC4xMDU8L1BNMkRpcz4NCiAgICAgIDxSYXRpbz4xMCU8L1JhdGlvPg0KICAgICAgPFZpc2liaWxpdHk+OC40NTU8L1Zpc2liaWxpdHk+DQogICAgPC9UYWJsZTE+DQogICAgPFRhYmxlMSBkaWZmZ3I6aWQ9IlRhYmxlMTI0IiBtc2RhdGE6cm93T3JkZXI9IjIzIiBkaWZmZ3I6aGFzQ2hhbmdlcz0iaW5zZXJ0ZWQiPg0KICAgICAgPFRpbWVzPjE5OjAwPC9UaW1lcz4NCiAgICAgIDxQTTEwPjAuMTA1PC9QTTEwPg0KICAgICAgPFBNMTBEaXM+MC4xMDU8L1BNMTBEaXM+DQogICAgICA8UE0yPjAuMDgxPC9QTTI+DQogICAgICA8UE0yRGlzPjAuMDgxPC9QTTJEaXM+DQogICAgICA8UmF0aW8+MTAlPC9SYXRpbz4NCiAgICAgIDxWaXNpYmlsaXR5PjcuMjE3PC9WaXNpYmlsaXR5Pg0KICAgIDwvVGFibGUxPg0KICA8L3RtcERhdGFTZXQ+DQo8L2RpZmZncjpkaWZmZ3JhbT4EAwAAAA5TeXN0ZW0uVmVyc2lvbgQAAAAGX01ham9yBl9NaW5vcgZfQnVpbGQJX1JldmlzaW9uAAAAAAgICAgCAAAAAAAAAP//////////CxYCAgMPZBYCZg8WAh4LXyFJdGVtQ291bnQCGBYwAgEPZBYCZg8VAgUyMDowMAUwLjEyOWQCAg9kFgJmDxUCBTIxOjAwBTAuMTM2ZAIDD2QWAmYPFQIFMjI6MDAFMC4yMjFkAgQPZBYCZg8VAgUyMzowMAUwLjE3NmQCBQ9kFgJmDxUCBDA6MDAFMC4xNDVkAgYPZBYCZg8VAgQxOjAwBTAuMTg2ZAIHD2QWAmYPFQIEMjowMAUwLjE2OGQCCA9kFgJmDxUCBDM6MDAFMC4xNDJkAgkPZBYCZg8VAgQ0OjAwBTAuMDg4ZAIKD2QWAmYPFQIENTowMAUwLjA4NmQCCw9kFgJmDxUCBDY6MDAFMC4wNjFkAgwPZBYCZg8VAgQ3OjAwBTAuMDY3ZAIND2QWAmYPFQIEODowMAUwLjA3NmQCDg9kFgJmDxUCBDk6MDAFMC4wNDhkAg8PZBYCZg8VAgUxMDowMAUwLjEzNWQCEA9kFgJmDxUCBTExOjAwBTAuMDM3ZAIRD2QWAmYPFQIFMTI6MDAFMC4wNjFkAhIPZBYCZg8VAgUxMzowMAUwLjA1OGQCEw9kFgJmDxUCBTE0OjAwBTAuMDg5ZAIUD2QWAmYPFQIFMTU6MDAFMC4xMTBkAhUPZBYCZg8VAgUxNjowMAUwLjAyOGQCFg9kFgJmDxUCBTE3OjAwBTAuMDk0ZAIXD2QWAmYPFQIFMTg6MDAFMC4xMDVkAhgPZBYCZg8VAgUxOTowMAUwLjA4MWRkak6EDhx2lI3RCvnvJfSMdbeZSUg=" />
+
+    <div>
+        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; height: 575px;
+            border: 1px solid #20a4ff;">
+            <tbody>
+                                            <tr style="margin-left:10px;">
+                                                <td style="color: Black;">
+                                                   <span style="margin-left:10px"> 车公庄站&nbsp;&nbsp;（单位：mg/m³）</span>
+                                                </td>
+                                            </tr>
+                <tr>
+                    <td width="575px" align="center">
+                            <table cellpadding="0" cellspacing="0" border="0" class="sortable" style="width: 305px;
+                                height: 403px;" align="center">
+                                
+
+                                        <thead>
+                                            <th width="60px">
+                                                时间
+                                            </th>
+                                            <th width="80px">
+                                                PM2.5
+                                            </th>
+                                        </thead>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;20:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.129
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;21:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.136
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;22:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.221
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;23:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.176
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;0:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.145
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;1:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.186
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;2:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.168
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;3:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.142
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;4:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.088
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;5:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.086
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;6:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.061
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;7:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.067
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;8:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.076
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;9:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.048
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;10:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.135
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;11:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.037
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;12:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.061
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;13:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.058
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;14:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.089
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;15:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.110
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;16:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.028
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;17:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.094
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;18:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.105
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                                        <tbody>
+                                            <tr>
+                                                <td style="color: Black;">
+                                                    &nbsp;19:00
+                                                </td>
+                                                <td>
+                                                    &nbsp;0.081
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    
+                            </table>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="1">
+                        <div id="pmChart">
+                        </div>
+                        
+                        <script type="text/javascript">var chart = new FusionCharts('../Images/swf/MSLine.swf', 'ChartPM', '98%', '140', '0', '0');var xmlVal = "";xmlVal += "<chart caption='' bgColor='F7F7F7, FFFFFF' borderAlpha='5' chartLeftMargin='5' chartRightMargin='5' chartTopMargin='8' chartBottomMargin='5' numVDivLines='24' divLineAlpha='36' labelDisplay='WRAP' showValues='0' canvasBorderColor='E9E9E9' borderColor='20A4FF' baseFontSize='10' showLegend='1'>";xmlVal += "<categories>";xmlVal += "<category label='' />";xmlVal += "<category label='20' />";xmlVal += "<category label='21' />";xmlVal += "<category label='22' />";xmlVal += "<category label='23' />";xmlVal += "<category label='0' />";xmlVal += "<category label='1' />";xmlVal += "<category label='2' />";xmlVal += "<category label='3' />";xmlVal += "<category label='4' />";xmlVal += "<category label='5' />";xmlVal += "<category label='6' />";xmlVal += "<category label='7' />";xmlVal += "<category label='8' />";xmlVal += "<category label='9' />";xmlVal += "<category label='10' />";xmlVal += "<category label='11' />";xmlVal += "<category label='12' />";xmlVal += "<category label='13' />";xmlVal += "<category label='14' />";xmlVal += "<category label='15' />";xmlVal += "<category label='16' />";xmlVal += "<category label='17' />";xmlVal += "<category label='18' />";xmlVal += "<category label='19' />";xmlVal += "<category label='h' />";xmlVal += "</categories>";xmlVal += "<dataset seriesName='PM2.5' showValues='0' color='FFCC33'>";xmlVal += "<set value='' />";xmlVal += "<set value='0.129' hoverText='0.129' />";xmlVal += "<set value='0.136' hoverText='0.136' />";xmlVal += "<set value='0.221' hoverText='0.221' />";xmlVal += "<set value='0.176' hoverText='0.176' />";xmlVal += "<set value='0.145' hoverText='0.145' />";xmlVal += "<set value='0.186' hoverText='0.186' />";xmlVal += "<set value='0.168' hoverText='0.168' />";xmlVal += "<set value='0.142' hoverText='0.142' />";xmlVal += "<set value='0.088' hoverText='0.088' />";xmlVal += "<set value='0.086' hoverText='0.086' />";xmlVal += "<set value='0.061' hoverText='0.061' />";xmlVal += "<set value='0.067' hoverText='0.067' />";xmlVal += "<set value='0.076' hoverText='0.076' />";xmlVal += "<set value='0.048' hoverText='0.048' />";xmlVal += "<set value='0.135' hoverText='0.135' />";xmlVal += "<set value='0.037' hoverText='0.037' />";xmlVal += "<set value='0.061' hoverText='0.061' />";xmlVal += "<set value='0.058' hoverText='0.058' />";xmlVal += "<set value='0.089' hoverText='0.089' />";xmlVal += "<set value='0.110' hoverText='0.110' />";xmlVal += "<set value='0.028' hoverText='0.028' />";xmlVal += "<set value='0.094' hoverText='0.094' />";xmlVal += "<set value='0.105' hoverText='0.105' />";xmlVal += "<set value='0.081' hoverText='0.081' />";xmlVal += "</dataset>";xmlVal += "</chart>";chart.setDataXML(xmlVal);chart.render("pmChart");</script>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="divUnit" style="position: absolute; top: 420px; left: 10px; line-height: 20px;
+            color: Gray;">
+            mg/m³
+        </div>
+        
+        <div style="position: absolute; top: 555px; left: 10px;">
+            &nbsp;当前数据未经最终审核，仅供参考&nbsp;
+        </div>
+        
+    </div>
+    </form>
+</body>
+</html>
